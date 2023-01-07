@@ -1,0 +1,118 @@
+CREATE TABLE college(
+    id SERIAL PRIMARY KEY ,
+    name VARCHAR
+);
+
+CREATE  TABLE student(
+    id SERIAL PRIMARY KEY ,
+    last_name VARCHAR(50) NOT NULL,
+    first_name VARCHAR(50),
+    college_id INT REFERENCES college(id),
+    email VARCHAR(70) UNIQUE
+);
+
+CREATE  TABLE course(
+    id SERIAL PRIMARY KEY ,
+    name VARCHAR NOT NULL ,
+    description VARCHAR
+
+);
+CREATE  TABLE schedule(
+    id SERIAL PRIMARY KEY ,
+    name VARCHAR NOT NULL ,
+    day INT,
+    start_time TIME,
+    end_time TIME
+);
+CREATE  TABLE department(
+    id SERIAL PRIMARY KEY ,
+    name VARCHAR NOT NULL ,
+    contact_phone VARCHAR,
+    contact_email VARCHAR UNIQUE
+);
+
+CREATE  TABLE instructor(
+    id SERIAL PRIMARY KEY ,
+    college_id INT REFERENCES college(id),
+    first_name VARCHAR,
+    last_name VARCHAR NOT NULL,
+    department_id INT REFERENCES department(id)
+
+);
+
+CREATE  TABLE section(
+    id SERIAL PRIMARY KEY ,
+    name VARCHAR NOT NULL ,
+    schedule_id INT REFERENCES schedule(id),
+    instructor_id INT REFERENCES instructor(id),
+    room INT
+);
+
+CREATE  TABLE enrollment(
+    id SERIAL PRIMARY KEY ,
+    academic_year DATE NOT NULL DEFAULT CURRENT_DATE,
+    date_enrolled DATE,
+    student_id INT REFERENCES student(id),
+    section_id INT REFERENCES section(id)
+);
+
+CREATE  TABLE attendance(
+    id SERIAL PRIMARY KEY ,
+    student_id INT REFERENCES student(id),
+    section_id INT REFERENCES section(id),
+    date_attended TIMESTAMP,
+    hours TIME
+);
+
+INSERT INTO college(name)
+VALUES ('KNY'),
+       ('Politeh'),
+       ('KGUSTA'),
+       ('KRSU');
+
+INSERT INTO student(last_name, first_name, college_id, email)
+VALUES ('Asel','Urakunova',1,'asel@gmail.com'),
+       ('Rustam','Esenov',2,'rus@gmail.com'),
+       ('Malika','Mamytova',3,'mamytova@gmail.com'),
+       ('Bolot','Usenov',4,'bolot@gmail.com'),
+       ('Dinara','Momunova',1,'dina@gmail.com');
+
+INSERT INTO course(name, description)
+VALUES('Java','Backand'),
+      ('JS','Frontend'),
+      ('Python','Cool course');
+
+INSERT INTO schedule(name, day, start_time, end_time)
+VALUES ('Day',5,'11:00','13:00'),
+       ('Evening',5,'18:00','20:00');
+
+INSERT INTO department(name, contact_phone, contact_email)
+VALUES('IT','+996777888999','it@department.com'),
+      ('Finance','+996777888666','financ@department.com');
+
+INSERT INTO instructor(college_id, first_name, last_name, department_id)
+VALUES(1,'Jamal','Amangeldieva',1),
+      (2,'Kemel','Usenov',2);
+
+INSERT INTO section(name, schedule_id, instructor_id, room)
+VALUES('Sport',1,1,23),
+      ('Smart',2,2,20);
+
+INSERT INTO enrollment(academic_year, date_enrolled, student_id, section_id)
+VALUES(now(),'2022-07-01',1,3),
+      (now(),'2022-07-01',1,4);
+
+INSERT INTO attendance(student_id, section_id, date_attended, hours)
+VALUES(1,3,'2022-08-05','05:00:09'),
+      (2,4,'2022-08-07','07:09:21');
+
+SELECT * FROM attendance;
+SELECT * FROM college;
+SELECT * FROM course;
+SELECT * FROM department;
+SELECT * FROM enrollment;
+SELECT * FROM instructor;
+SELECT * FROM schedule;
+SELECT * FROM section;
+SELECT * FROM student;
+
