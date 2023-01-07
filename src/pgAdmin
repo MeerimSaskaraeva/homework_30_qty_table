@@ -1,0 +1,131 @@
+CREATE TABLE client(
+id SERIAL PRIMARY KEY,
+full_name VARCHAR NOT NULL,
+date_of_birth DATE,
+phone_number VARCHAR,
+money NUMERIC);
+
+INSERT INTO client(full_name,date_of_birth,phone_number,money)
+VALUES('Mamytov Talant','1982-02-18','+996700180282',100000),
+('Usen Asanov','1999-08-28','+996700666777',50000),
+('Dina Minaeva','2000-06-30','+996700123345',7000),
+('Urmat Usenov','2003-01-21','+996700654123',6000);
+select * from client;
+
+CREATE TABLE gender(
+id INT,
+gender VARCHAR);
+
+INSERT INTO gender(id,gender)
+VALUES(1,'Female'),
+(2,'Male');
+
+select * from gender;
+
+CREATE TABLE bank_account(
+id SERIAL PRIMARY KEY,
+name VARCHAR);
+
+INSERT INTO bank_account(name)
+VALUES('BAKAI'),
+('DEMIR'),
+('BAYTUSHUM'),
+('PSK');
+
+select * from bank_account;
+
+CREATE TABLE country(
+id SERIAL PRIMARY KEY,
+name VARCHAR);
+
+INSERT INTO country(name)
+VALUES('Kyrgyzstan'),
+('Kazahstan'),
+('Russia'),
+('Germany');
+
+select * from country;
+
+CREATE TABLE licence(
+id SERIAL PRIMARY KEY,
+date_of_issue DATE,
+expiration_date DATE);
+
+INSERT INTO licence(date_of_issue,expiration_date)
+VALUES('2022-09-30','2023-09-30'),
+('2022-10-30','2023-10-30');
+
+select * from licence;
+
+CREATE TABLE company(
+id SERIAL PRIMARY KEY,
+name VARCHAR NOT NULL,
+bank_account_id INT REFERENCES bank_account(id) );
+
+INSERT INTO company(name,bank_account_id)
+VALUES('BBC',1),
+('ABC',2),
+('ASU',3);
+
+select * from company;
+
+CREATE TABLE taxi_type(
+id SERIAL PRIMARY KEY,
+type VARCHAR,
+company_id INT REFERENCES company(id));
+
+INSERT INTO taxi_type(type,company_id)
+VALUES('COMFORT',1),
+('BUSINESS',2),
+('STANDART',3);
+
+select * from taxi_type;
+
+CREATE TABLE price(
+id SERIAL PRIMARY KEY,
+taxi_type_id INT REFERENCES taxi_type(id),
+price_per_km NUMERIC);
+
+INSERT INTO price(taxi_type_id,price_per_km)
+VALUES(1,45),
+(2,55),
+(3,65);
+
+select * from price;
+
+CREATE TABLE car(
+id SERIAL PRIMARY KEY,
+model VARCHAR NOT NULL,
+number VARCHAR,
+colour VARCHAR,
+year DATE,
+taxi_type_id INT REFERENCES taxi_type(id),
+company_id INT REFERENCES company(id));
+
+
+INSERT INTO car(model,number,colour,year,taxi_type_id,company_id)
+VALUES('BMW','08KG123DFG','white','2012-01-01',1,1),
+('AUDI','08KG145FGD','black','2013-01-01',2,3),
+('TOYOTA','08KG123DFG','red','2014-01-01',2,1);
+
+select * from car;
+
+CREATE TABLE driver(
+id SERIAL PRIMARY KEY,
+name VARCHAR NOT NULL,
+surname VARCHAR,
+gender_id INT REFERENCES gender(id),
+phone VARCHAR,
+licence_id INT REFERENCES licence(id),
+money NUMERIC,
+car_id INT REFERENCES car(id));
+
+INSERT INTO driver(name,surname,gender_id,phone,licence_id,money,car_id)
+VALUES('Nur','Dinov',2,'+996777888999',1,9999,1),
+('Ermek','Bolotov',2,'+996777234999',2,10045,3),
+('Ulan','Momoev',2,'+996777114959',1,6666,2);
+
+select * from driver;
+
+
+
