@@ -1,0 +1,525 @@
+Last login: Sun Jan  8 14:36:31 on ttys001
+
+The default interactive shell is now zsh.
+To update your account to use zsh, please run `chsh -s /bin/zsh`.
+For more details, please visit https://support.apple.com/kb/HT208050.
+/Library/PostgreSQL/15/scripts/runpsql.sh; exit
+Macs-MacBook-Pro:~ mac$ /Library/PostgreSQL/15/scripts/runpsql.sh; exit
+Server [localhost]:
+Database [postgres]:
+Port [5432]:
+Username [postgres]:
+Password for user postgres:
+psql (15.1)
+Type "help" for help.
+
+postgres=# \d
+                List of relations
+ Schema |       Name        |   Type   |  Owner
+--------+-------------------+----------+----------
+ public | employee          | table    | postgres
+ public | employee_id_seq   | sequence | postgres
+ public | students          | table    | postgres
+ public | students_id_seq   | sequence | postgres
+ public | university        | table    | postgres
+ public | university_id_seq | sequence | postgres
+(6 rows)
+
+postgres=# \l
+                                            List of databases
+   Name    |  Owner   | Encoding | Collate | Ctype | ICU Locale | Locale Provider |   Access privileges
+-----------+----------+----------+---------+-------+------------+-----------------+-----------------------
+ book      | postgres | UTF8     | C       | C     |            | libc            |
+ java8     | postgres | UTF8     | C       | C     |            | libc            |
+ job       | postgres | UTF8     | C       | C     |            | libc            |
+ postgres  | postgres | UTF8     | C       | C     |            | libc            |
+ taxi      | postgres | UTF8     | C       | C     |            | libc            |
+ template0 | postgres | UTF8     | C       | C     |            | libc            | =c/postgres          +
+           |          |          |         |       |            |                 | postgres=CTc/postgres
+ template1 | postgres | UTF8     | C       | C     |            | libc            | =c/postgres          +
+           |          |          |         |       |            |                 | postgres=CTc/postgres
+(7 rows)
+
+postgres=# \c book
+You are now connected to database "book" as user "postgres".
+book=# \l
+                                            List of databases
+   Name    |  Owner   | Encoding | Collate | Ctype | ICU Locale | Locale Provider |   Access privileges
+-----------+----------+----------+---------+-------+------------+-----------------+-----------------------
+ book      | postgres | UTF8     | C       | C     |            | libc            |
+ java8     | postgres | UTF8     | C       | C     |            | libc            |
+ job       | postgres | UTF8     | C       | C     |            | libc            |
+ postgres  | postgres | UTF8     | C       | C     |            | libc            |
+ taxi      | postgres | UTF8     | C       | C     |            | libc            |
+ template0 | postgres | UTF8     | C       | C     |            | libc            | =c/postgres          +
+           |          |          |         |       |            |                 | postgres=CTc/postgres
+ template1 | postgres | UTF8     | C       | C     |            | libc            | =c/postgres          +
+           |          |          |         |       |            |                 | postgres=CTc/postgres
+(7 rows)
+
+book=# \d
+                 List of relations
+ Schema |        Name        |   Type   |  Owner
+--------+--------------------+----------+----------
+ public | author             | table    | postgres
+ public | author_book        | table    | postgres
+ public | author_book_id_seq | sequence | postgres
+ public | author_id_seq      | sequence | postgres
+ public | book               | table    | postgres
+ public | book_id_seq        | sequence | postgres
+ public | book_order         | table    | postgres
+ public | book_order_id_seq  | sequence | postgres
+ public | category           | table    | postgres
+ public | category_id_seq    | sequence | postgres
+ public | city               | table    | postgres
+ public | city_id_seq        | sequence | postgres
+ public | customer           | table    | postgres
+ public | customer_id_seq    | sequence | postgres
+ public | ordering           | table    | postgres
+(15 rows)
+
+book=# select * from ordering;
+ book_id | book_order_id | price
+---------+---------------+-------
+(0 rows)
+
+book=# clear;
+ERROR:  syntax error at or near "clear"
+LINE 1: clear;
+        ^
+book=# clear
+book-# insert into book(
+book(# category_id,title,year,price,description)
+book-# VALUES(
+book(# 1,'Tema','2001-01-01',2000,'Good book')
+book-# ;
+ERROR:  syntax error at or near "clear"
+LINE 1: clear
+        ^
+book=# INSERT INTO book(
+book(# category_id,title,year,price,description)
+book-# VALUES(
+book(# 1,'Tema','2002-01-01',2000,'Good book')
+book-# ;
+INSERT 0 1
+book=# select * from book;
+ id | category_id | title |    year    | price | description
+----+-------------+-------+------------+-------+-------------
+  1 |           1 | Tema  | 2002-01-01 |  2000 | Good book
+(1 row)
+
+book=# INSERT INTO book(
+book(# category_id,title,year,price,description)
+book-# VALUES(
+book(# 2,'Main','2000-01-01',3000,'Interesting book')
+book-# ;
+INSERT 0 1
+book=# select * from book;
+ id | category_id | title |    year    | price |   description
+----+-------------+-------+------------+-------+------------------
+  1 |           1 | Tema  | 2002-01-01 |  2000 | Good book
+  2 |           2 | Main  | 2000-01-01 |  3000 | Interesting book
+(2 rows)
+
+book=# INSERT INTO author(
+book(# name)
+book-# VALUES(
+book(# 'Tom Bunny'),
+book-# ('Smith James')
+book-# ;
+INSERT 0 2
+book=# select * from aythor;
+ERROR:  relation "aythor" does not exist
+LINE 1: select * from aythor;
+                      ^
+book=# select * from author;
+ id |       name
+----+------------------
+  1 | Good bye America
+  2 | Tom Bunny
+  3 | Smith James
+(3 rows)
+
+book=# select * from book;
+ id | category_id | title |    year    | price |   description
+----+-------------+-------+------------+-------+------------------
+  1 |           1 | Tema  | 2002-01-01 |  2000 | Good book
+  2 |           2 | Main  | 2000-01-01 |  3000 | Interesting book
+(2 rows)
+
+book=# select * from category;
+ id | description
+----+-------------
+  1 | Roman
+  2 | Fantasy
+(2 rows)
+
+book=# INSERT INTO author_book(
+book(# author_id,book_id)
+book-# VALUES(
+book(# 2,2),
+book-# (3,1)
+book-# ;
+ERROR:  column "author_id" of relation "author_book" does not exist
+LINE 2: author_id,book_id)
+        ^
+book=# \d author_book;
+                             Table "public.author_book"
+ Column  |  Type   | Collation | Nullable |                 Default
+---------+---------+-----------+----------+-----------------------------------------
+ id      | integer |           | not null | nextval('author_book_id_seq'::regclass)
+ book_id | integer |           |          |
+Indexes:
+    "author_book_pkey" PRIMARY KEY, btree (id)
+Foreign-key constraints:
+    "author_book_book_id_fkey" FOREIGN KEY (book_id) REFERENCES book(id)
+
+book=# INSERT INTO author_book(
+book(# book_id)
+book-# VALUES(
+book(# 1),
+book-# (2)
+book-# ;
+INSERT 0 2
+book=# select * from author_book;
+ id | book_id
+----+---------
+  1 |       1
+  2 |       2
+(2 rows)
+
+book=# \d customer;
+                                   Table "public.customer"
+   Column   |       Type        | Collation | Nullable |               Default
+------------+-------------------+-----------+----------+--------------------------------------
+ id         | integer           |           | not null | nextval('customer_id_seq'::regclass)
+ first_name | character varying |           | not null |
+ last_name  | character varying |           |          |
+ city_id    | integer           |           |          |
+Indexes:
+    "customer_pkey" PRIMARY KEY, btree (id)
+Foreign-key constraints:
+    "customer_city_id_fkey" FOREIGN KEY (city_id) REFERENCES city(id)
+Referenced by:
+    TABLE "book_order" CONSTRAINT "book_order_customer_id_fkey" FOREIGN KEY (customer_id) REFERENCES customer(id)
+
+...skipping...
+                                   Table "public.customer"
+   Column   |       Type        | Collation | Nullable |               Default
+------------+-------------------+-----------+----------+--------------------------------------
+ id         | integer           |           | not null | nextval('customer_id_seq'::regclass)
+ first_name | character varying |           | not null |
+ last_name  | character varying |           |          |
+ city_id    | integer           |           |          |
+Indexes:
+    "customer_pkey" PRIMARY KEY, btree (id)
+Foreign-key constraints:
+    "customer_city_id_fkey" FOREIGN KEY (city_id) REFERENCES city(id)
+Referenced by:
+    TABLE "book_order" CONSTRAINT "book_order_customer_id_fkey" FOREIGN KEY (customer_id) REFERENCES customer(id)
+
+~
+~
+~
+~
+~
+book=# insert into customer(
+book(# first_name,last_name,city_id)
+book-# VALUES(
+book(# 'Asel','Urakun',1)
+book-# ;
+ERROR:  insert or update on table "customer" violates foreign key constraint "customer_city_id_fkey"
+DETAIL:  Key (city_id)=(1) is not present in table "city".
+book=# insert into city(
+book(# name)
+book-# VALUES(
+book(# 'London'),
+book-# ('Moscow'),
+book-# ('Bichkek')
+book-# ;
+INSERT 0 3
+book=# select * from city;
+ id |  name
+----+---------
+  1 | London
+  2 | Moscow
+  3 | Bichkek
+(3 rows)
+
+book=# insert into customer(
+book(# first_name,last_name,city_id)
+book-# VALUES(
+book(# 'Asel','Urakun',3),
+book-# ('Sergey','Nemsov',2),
+book-# ('Billy','Bush',1)
+book-# ;
+INSERT 0 3
+book=# select * from customer;
+ id | first_name | last_name | city_id
+----+------------+-----------+---------
+  2 | Asel       | Urakun    |       3
+  3 | Sergey     | Nemsov    |       2
+  4 | Billy      | Bush      |       1
+(3 rows)
+
+book=# insert into book_order(
+book(# customer_id,order_date)
+book-# VALUES(
+book(# 1,'2022-03-09'),
+book-# (2,'2023-01-01'),
+book-# (3,'2022-09-23')
+book-# ;
+ERROR:  insert or update on table "book_order" violates foreign key constraint "book_order_customer_id_fkey"
+DETAIL:  Key (customer_id)=(1) is not present in table "customer".
+book=# select * from customer;
+ id | first_name | last_name | city_id
+----+------------+-----------+---------
+  2 | Asel       | Urakun    |       3
+  3 | Sergey     | Nemsov    |       2
+  4 | Billy      | Bush      |       1
+(3 rows)
+
+book=# alter table customer add constrain id not null primary key(id)
+book-# ;
+ERROR:  syntax error at or near "("
+LINE 1: ...ter table customer add constrain id not null primary key(id)
+                                                                   ^
+book=# drop table customer;
+ERROR:  cannot drop table customer because other objects depend on it
+DETAIL:  constraint book_order_customer_id_fkey on table book_order depends on table customer
+HINT:  Use DROP ... CASCADE to drop the dependent objects too.
+book=# alter table customer add phone;
+ERROR:  syntax error at or near ";"
+LINE 1: alter table customer add phone;
+                                      ^
+book=# alter table customer add phone VARCHAR;
+ALTER TABLE
+book=# select * from customer;
+ id | first_name | last_name | city_id | phone
+----+------------+-----------+---------+-------
+  2 | Asel       | Urakun    |       3 |
+  3 | Sergey     | Nemsov    |       2 |
+  4 | Billy      | Bush      |       1 |
+(3 rows)
+
+book=# alter table customer add constraint id SERIAL PRIMARY KEY(id);
+ERROR:  syntax error at or near "SERIAL"
+LINE 1: alter table customer add constraint id SERIAL PRIMARY KEY(id...
+                                               ^
+book=# alter table customer add constraint id UNIQUE(id);
+ALTER TABLE
+book=# select * from customer;
+ id | first_name | last_name | city_id | phone
+----+------------+-----------+---------+-------
+  2 | Asel       | Urakun    |       3 |
+  3 | Sergey     | Nemsov    |       2 |
+  4 | Billy      | Bush      |       1 |
+(3 rows)
+
+book=# \d customer;
+                                   Table "public.customer"
+   Column   |       Type        | Collation | Nullable |               Default
+------------+-------------------+-----------+----------+--------------------------------------
+ id         | integer           |           | not null | nextval('customer_id_seq'::regclass)
+ first_name | character varying |           | not null |
+ last_name  | character varying |           |          |
+ city_id    | integer           |           |          |
+ phone      | character varying |           |          |
+Indexes:
+    "customer_pkey" PRIMARY KEY, btree (id)
+    "id" UNIQUE CONSTRAINT, btree (id)
+Foreign-key constraints:
+    "customer_city_id_fkey" FOREIGN KEY (city_id) REFERENCES city(id)
+Referenced by:
+    TABLE "book_order" CONSTRAINT "book_order_customer_id_fkey" FOREIGN KEY (customer_id) REFERENCES customer(id)
+
+book=# select * from book_order;
+ id | customer_id | order_date
+----+-------------+------------
+(0 rows)
+
+book=# insert into book_order(
+book(# customer_id,order_date)
+book-# VALUES(
+book(# 2,'2022-09-09'),
+book-# (3,'2022-01-01'),
+book-# (4,'2023-01-05')
+book-# ;
+INSERT 0 3
+book=# select * from book_order;
+ id | customer_id | order_date
+----+-------------+------------
+  4 |           2 | 2022-09-09
+  5 |           3 | 2022-01-01
+  6 |           4 | 2023-01-05
+(3 rows)
+
+book=# insert into ordering(
+book(# book_id,book_order_id,price)
+book-# VALUES(
+book(# 1,2,1000),
+book-# (2,1,2000)
+book-# ;
+ERROR:  insert or update on table "ordering" violates foreign key constraint "ordering_book_order_id_fkey"
+DETAIL:  Key (book_order_id)=(2) is not present in table "book_order".
+book=# select * book_order;
+ERROR:  syntax error at or near "book_order"
+LINE 1: select * book_order;
+                 ^
+book=# select * from book_order;
+ id | customer_id | order_date
+----+-------------+------------
+  4 |           2 | 2022-09-09
+  5 |           3 | 2022-01-01
+  6 |           4 | 2023-01-05
+(3 rows)
+
+book=# insert into ordering(
+book(# book_id,book_order_id,price)
+book-# VALUES(
+book(# 1,4,1000),
+book-# (2,5,2000);
+INSERT 0 2
+book=# select * from ordering;
+ book_id | book_order_id | price
+---------+---------------+-------
+       1 |             4 |  1000
+       2 |             5 |  2000
+(2 rows)
+
+book=# \d
+                 List of relations
+ Schema |        Name        |   Type   |  Owner
+--------+--------------------+----------+----------
+ public | author             | table    | postgres
+ public | author_book        | table    | postgres
+ public | author_book_id_seq | sequence | postgres
+ public | author_id_seq      | sequence | postgres
+ public | book               | table    | postgres
+ public | book_id_seq        | sequence | postgres
+ public | book_order         | table    | postgres
+ public | book_order_id_seq  | sequence | postgres
+ public | category           | table    | postgres
+ public | category_id_seq    | sequence | postgres
+ public | city               | table    | postgres
+ public | city_id_seq        | sequence | postgres
+ public | customer           | table    | postgres
+ public | customer_id_seq    | sequence | postgres
+ public | ordering           | table    | postgres
+(15 rows)
+
+book=# \d category
+                                      Table "public.category"
+   Column    |         Type          | Collation | Nullable |               Default
+-------------+-----------------------+-----------+----------+--------------------------------------
+ id          | integer               |           | not null | nextval('category_id_seq'::regclass)
+ description | character varying(50) |           |          |
+Indexes:
+    "category_pkey" PRIMARY KEY, btree (id)
+Referenced by:
+    TABLE "book" CONSTRAINT "book_category_id_fkey" FOREIGN KEY (category_id) REFERENCES category(id)
+
+book=# \d book
+                                    Table "public.book"
+   Column    |       Type        | Collation | Nullable |             Default
+-------------+-------------------+-----------+----------+----------------------------------
+ id          | integer           |           | not null | nextval('book_id_seq'::regclass)
+ category_id | integer           |           |          |
+ title       | character varying |           |          |
+ year        | date              |           |          |
+ price       | numeric           |           |          |
+ description | character varying |           |          |
+Indexes:
+    "book_pkey" PRIMARY KEY, btree (id)
+Foreign-key constraints:
+    "book_category_id_fkey" FOREIGN KEY (category_id) REFERENCES category(id)
+Referenced by:
+    TABLE "author_book" CONSTRAINT "author_book_book_id_fkey" FOREIGN KEY (book_id) REFERENCES book(id)
+    TABLE "ordering" CONSTRAINT "ordering_book_id_fkey" FOREIGN KEY (book_id) REFERENCES book(id)
+
+book=# \d author_book
+                             Table "public.author_book"
+ Column  |  Type   | Collation | Nullable |                 Default
+---------+---------+-----------+----------+-----------------------------------------
+ id      | integer |           | not null | nextval('author_book_id_seq'::regclass)
+ book_id | integer |           |          |
+Indexes:
+    "author_book_pkey" PRIMARY KEY, btree (id)
+Foreign-key constraints:
+    "author_book_book_id_fkey" FOREIGN KEY (book_id) REFERENCES book(id)
+
+book=# \d customer
+                                   Table "public.customer"
+   Column   |       Type        | Collation | Nullable |               Default
+------------+-------------------+-----------+----------+--------------------------------------
+ id         | integer           |           | not null | nextval('customer_id_seq'::regclass)
+ first_name | character varying |           | not null |
+ last_name  | character varying |           |          |
+ city_id    | integer           |           |          |
+ phone      | character varying |           |          |
+Indexes:
+    "customer_pkey" PRIMARY KEY, btree (id)
+    "id" UNIQUE CONSTRAINT, btree (id)
+Foreign-key constraints:
+    "customer_city_id_fkey" FOREIGN KEY (city_id) REFERENCES city(id)
+Referenced by:
+    TABLE "book_order" CONSTRAINT "book_order_customer_id_fkey" FOREIGN KEY (customer_id) REFERENCES customer(id)
+
+book=# select * from category;
+ id | description
+----+-------------
+  1 | Roman
+  2 | Fantasy
+(2 rows)
+
+book=# select * from book;
+ id | category_id | title |    year    | price |   description
+----+-------------+-------+------------+-------+------------------
+  1 |           1 | Tema  | 2002-01-01 |  2000 | Good book
+  2 |           2 | Main  | 2000-01-01 |  3000 | Interesting book
+(2 rows)
+
+book=# select * from author;
+ id |       name
+----+------------------
+  1 | Good bye America
+  2 | Tom Bunny
+  3 | Smith James
+(3 rows)
+
+book=# update table author(name)
+book-# VALUES('Rich','Brain');
+ERROR:  syntax error at or near "table"
+LINE 1: update table author(name)
+               ^
+book=# select * from author_book;
+ id | book_id
+----+---------
+  1 |       1
+  2 |       2
+(2 rows)
+
+book=# select * from customer;
+ id | first_name | last_name | city_id | phone
+----+------------+-----------+---------+-------
+  2 | Asel       | Urakun    |       3 |
+  3 | Sergey     | Nemsov    |       2 |
+  4 | Billy      | Bush      |       1 |
+(3 rows)
+
+book=# select * from book_order;
+ id | customer_id | order_date
+----+-------------+------------
+  4 |           2 | 2022-09-09
+  5 |           3 | 2022-01-01
+  6 |           4 | 2023-01-05
+(3 rows)
+
+book=# select * from ordering;
+ book_id | book_order_id | price
+---------+---------------+-------
+       1 |             4 |  1000
+       2 |             5 |  2000
+(2 rows)
+
+book=#
